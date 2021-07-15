@@ -8,7 +8,7 @@ const width = 20
 const gridCellCount = width * width
 const cells = []
 const pacmanClass = 'pacman'
-let pacmanPosition = cells / 2
+let pacmanPosition = 150
 
 
 // * Functions
@@ -31,10 +31,26 @@ function createGrid() {
   }
 }
 
+function borderWalls(){
+  for (let index = 0; index <= 380; index += 20) {
+    cells[index].classList.add('walls')
+  }
 
+  for (let index = 19; index <= 399; index += 20) {
+    cells[index].classList.add('walls')
+  }
+
+  for (let index = 0; index <= 19; index++) {
+    cells[index].classList.add('walls')  
+  }
+
+  for (let index = 381; index <= 398; index++) {
+    cells[index].classList.add('walls')  
+  }
+  
+}
 
 function handleKeyUp(event){
-  console.log(event.keyCode)
   const x = pacmanPosition % width
   const y = Math.floor(pacmanPosition / width) 
 
@@ -67,6 +83,6 @@ function handleKeyUp(event){
 
 createGrid()
 addPacman()
-
+borderWalls()
 // * Events
 window.addEventListener('keydown', handleKeyUp)
