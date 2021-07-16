@@ -39,7 +39,7 @@ body {
   width: 5%;
 }
 
-.walls {
+.wall {
   background-color: #6aa8e293
 }
 
@@ -47,6 +47,12 @@ body {
   background-color: #d26ffc5f
 }
 
-.portals {
+.portal {
   background-color: #3eff0969
+}
+
+.foodpoint {
+  background-image: url('../images/foodpoint.png');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
