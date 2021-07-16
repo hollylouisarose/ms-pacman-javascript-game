@@ -1,9 +1,7 @@
 // * DOM Variables
 
 const grid = document.querySelector('.grid')
-const gameScore = document.getElementById('#score')
-
-console.log(gameScore)
+// const gameScore = document.getElementById('#score')
 
 // * Game Variables
 
@@ -12,7 +10,7 @@ const gridCellCount = width * width
 const cells = []
 const pacmanClass = 'pacman'
 let pacmanPosition = 150
-// let score = 0
+let totalGameScore = 0
 
 
 // * Functions
@@ -225,21 +223,29 @@ function handleKeyUp(event){
     case 39:
       if (x < width - 2 && wallCheck(pacmanPosition + 1)){
         pacmanPosition ++  
+        console.log(totalGameScore = totalGameScore + 10)
+        cells[pacmanPosition].classList.remove('foodpoint')
       } 
       break
     case 37: 
       if (x > 1 && wallCheck(pacmanPosition - 1)){
         pacmanPosition --
+        console.log(totalGameScore = totalGameScore + 10)
+        cells[pacmanPosition].classList.remove('foodpoint')
       } 
       break
     case 38:
       if (y > 1 && wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
+        console.log(totalGameScore = totalGameScore + 10)
+        cells[pacmanPosition].classList.remove('foodpoint')
       }
       break 
     case 40:
       if (y < width - 2 && wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
+        console.log(totalGameScore = totalGameScore + 10)
+        cells[pacmanPosition].classList.remove('foodpoint')
       }
       break
   }
@@ -258,11 +264,8 @@ function makeFoodPoints(){
     && !cell.classList.contains('ghosthome'))
       cell.classList.add('foodpoint')
   })
-  
   return foodPoints
 }
-
-
 
 createGrid()
 addPacman()
