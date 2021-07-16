@@ -1,7 +1,7 @@
 // * DOM Variables
 
 const grid = document.querySelector('.grid')
-// const gameScore = document.getElementById('#score')
+const gameScore = document.getElementById('#score')
 
 // * Game Variables
 
@@ -219,33 +219,30 @@ function handleKeyUp(event){
   removePacman()
   const x = pacmanPosition % width
   const y = Math.floor(pacmanPosition / width) 
+  gameScore.innerHTML = totalGameScore
   switch (event.keyCode) {
     case 39:
       if (x < width - 2 && wallCheck(pacmanPosition + 1)){
-        pacmanPosition ++  
-        console.log(totalGameScore = totalGameScore + 10)
-        cells[pacmanPosition].classList.remove('foodpoint')
+        pacmanPosition ++ 
+        scoreCheck(pacmanPosition)
       } 
       break
     case 37: 
       if (x > 1 && wallCheck(pacmanPosition - 1)){
         pacmanPosition --
-        console.log(totalGameScore = totalGameScore + 10)
-        cells[pacmanPosition].classList.remove('foodpoint')
+        scoreCheck(pacmanPosition)
       } 
       break
     case 38:
       if (y > 1 && wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
-        console.log(totalGameScore = totalGameScore + 10)
-        cells[pacmanPosition].classList.remove('foodpoint')
+        scoreCheck(pacmanPosition)
       }
       break 
     case 40:
       if (y < width - 2 && wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
-        console.log(totalGameScore = totalGameScore + 10)
-        cells[pacmanPosition].classList.remove('foodpoint')
+        scoreCheck(pacmanPosition)
       }
       break
   }
@@ -255,6 +252,16 @@ function handleKeyUp(event){
 function wallCheck(position) { 
   return !cells[position].classList.contains('wall')
 }
+
+function scoreCheck(position) {
+  if (cells[position].classList.contains('foodpoint')){
+    cells[pacmanPosition].classList.remove('foodpoint')
+    totalGameScore = totalGameScore + 10 
+  } else if (!cells[position].classList.contains('foodpoint')){
+    return
+  }
+}
+
 
 function makeFoodPoints(){
   const foodPoints = cells.map(cell =>{
