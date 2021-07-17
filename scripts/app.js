@@ -215,6 +215,28 @@ function makePortals(){
   }
 }
 
+function makeFoodPoints(){
+  const foodPoints = cells.map(cell =>{
+    if (!cell.classList.contains('wall') 
+    && !cell.classList.contains('portal')
+    && !cell.classList.contains(pacmanClass)
+    && !cell.classList.contains('ghosthome'))
+      cell.classList.add('foodpoint')
+  })
+  return foodPoints
+}
+
+function makeSuperFoodPoints(){
+  cells[61].classList.remove('foodpoint')
+  cells[58].classList.remove('foodpoint')
+  cells[302].classList.remove('foodpoint')
+  cells[358].classList.remove('foodpoint')
+  cells[61].classList.add('superfoodpoint')
+  cells[58].classList.add('superfoodpoint')
+  cells[302].classList.add('superfoodpoint')
+  cells[358].classList.add('superfoodpoint')
+}
+
 function handleKeyUp(event){
   removePacman()
   const x = pacmanPosition % width
@@ -257,21 +279,14 @@ function scoreCheck(position) {
   if (cells[position].classList.contains('foodpoint')){
     cells[pacmanPosition].classList.remove('foodpoint')
     totalGameScore = totalGameScore + 10 
-  } else if (!cells[position].classList.contains('foodpoint')){
+  } else if (cells[position].classList.contains('superfoodpoint')){
+    cells[pacmanPosition].classList.remove('superfoodpoint')
+    totalGameScore = totalGameScore + 50 
+    console.log('superpoint!')
+  } else if (!cells[position].classList.contains('foodpoint') ||
+            !cells[position].classList.contains('superfoodpoint')){
     return
   }
-}
-
-
-function makeFoodPoints(){
-  const foodPoints = cells.map(cell =>{
-    if (!cell.classList.contains('wall') 
-    && !cell.classList.contains('portal')
-    && !cell.classList.contains(pacmanClass)
-    && !cell.classList.contains('ghosthome'))
-      cell.classList.add('foodpoint')
-  })
-  return foodPoints
 }
 
 createGrid()
@@ -280,6 +295,7 @@ makeWalls()
 makeGhostHome()
 makePortals()
 makeFoodPoints()
+makeSuperFoodPoints()
 
 
 // * Events

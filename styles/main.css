@@ -56,3 +56,9 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.superfoodpoint{
+  background-image: url('../images/superfoodpoint.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
