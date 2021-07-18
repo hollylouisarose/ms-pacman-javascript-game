@@ -44,7 +44,7 @@ body {
 }
 
 .ghosthome {
-  background-color: #d26ffc5f
+  background-color: #ebe52946
 }
 
 .portal {
@@ -62,3 +62,28 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.redghost{
+  background-image: url('../images/redghost.png');
+  background-repeat: no-repeat;
+  background-size: contain; 
+}
+
+.orangeghost{
+  background-image: url('../images/orangeghost.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.blueghost{
+  background-image: url('../images/blueghost.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.pinkghost{
+  background-image: url('../images/pinkghost.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
