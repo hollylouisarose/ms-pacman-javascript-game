@@ -318,29 +318,25 @@ let ghostMoves = [1, -1, +width, -width]
 let isPathClear = true
 
 function ghostPathCheck(){
-
-  // console.log(cells[redGhostPosition])
- 
-
   if (cells[redGhostPosition + 1].classList.contains(wallClass)){
     isPathClear = false
   } else if (cells[redGhostPosition - 1].classList.contains(wallClass)){
     isPathClear = false
+  } else if (cells[redGhostPosition - width].classList.contains(wallClass)){
+    isPathClear = false
+  } else if (cells[redGhostPosition + width].classList.contains(wallClass)){
+    isPathClear = false
   }
-
   console.log('checking path', isPathClear)
-
   if (isPathClear === false){
     console.log('change direction')
   }
 }
 
-
-
 function ghostMove(){
   ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
   console.log(ghostMoves)
-  setInterval(() => {
+  const ghostMove = setInterval(() => {
     ghostPathCheck()
     if (isPathClear === true && ghostMoves === 1){
       redGhostPosition ++
@@ -348,9 +344,15 @@ function ghostMove(){
     } else if (isPathClear === true && ghostMoves === -1){
       redGhostPosition --
       addRedGhost()
+    } else if (isPathClear === true && ghostMoves === - width){
+      redGhostPosition -= width
+      addRedGhost()
+    } else if (isPathClear === true && ghostMoves === + width){
+      redGhostPosition += width
+      addRedGhost()
     }
+  } , 1000)
     
-  }, 1000)
 
 }
 
