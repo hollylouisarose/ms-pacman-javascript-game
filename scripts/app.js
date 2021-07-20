@@ -317,6 +317,42 @@ function scoreCheck(position) {
 let ghostMoves = [1, -1, +width, -width]
 let isPathClear = true
 
+
+function ghostMove(){
+  let ghostRoute = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  console.log(ghostRoute)
+  setInterval(() => {
+    ghostPathCheck()
+    console.log(ghostRoute)
+    if (isPathClear === false) {
+      ghostRoute = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+      console.log('new direction')
+    }
+    if (isPathClear === true && ghostRoute === 1){
+      removeRedGhost()
+      redGhostPosition += 1
+      console.log(redGhostPosition, ghostRoute)
+      addRedGhost()
+    } else if (isPathClear === true && ghostRoute === -1){
+      removeRedGhost()
+      redGhostPosition -= 1
+      console.log(redGhostPosition, ghostRoute)
+      addRedGhost()
+    } else if (isPathClear === true && ghostRoute === - width){
+      removeRedGhost()
+      redGhostPosition -= width
+      console.log(redGhostPosition, ghostRoute)
+      addRedGhost()
+    } else if (isPathClear === true && ghostRoute === + width){
+      removeRedGhost()
+      redGhostPosition += width
+      console.log(redGhostPosition, ghostRoute)
+      addRedGhost()
+    }
+  } , 1000)
+  
+}
+
 function ghostPathCheck(){
   if (cells[redGhostPosition + 1].classList.contains(wallClass)){
     isPathClear = false
@@ -329,33 +365,9 @@ function ghostPathCheck(){
   }
   console.log('checking path', isPathClear)
   if (isPathClear === false){
-    console.log('change direction')
+    return
   }
 }
-
-function ghostMove(){
-  ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  console.log(ghostMoves)
-  const ghostMove = setInterval(() => {
-    ghostPathCheck()
-    if (isPathClear === true && ghostMoves === 1){
-      redGhostPosition ++
-      addRedGhost()
-    } else if (isPathClear === true && ghostMoves === -1){
-      redGhostPosition --
-      addRedGhost()
-    } else if (isPathClear === true && ghostMoves === - width){
-      redGhostPosition -= width
-      addRedGhost()
-    } else if (isPathClear === true && ghostMoves === + width){
-      redGhostPosition += width
-      addRedGhost()
-    }
-  } , 1000)
-    
-
-}
-
 
 // path array
 // is path clear? Y / N
@@ -364,6 +376,8 @@ function ghostMove(){
 // moves
 // if not clear, change direction
 // check path each time not change direction each time
+
+// assign a new direction to 
 
 
 
@@ -380,6 +394,7 @@ makeFoodPoints()
 makeSuperFoodPoints()
 ghostPathCheck()
 // ghostMove()
+
 
 // * Events
 window.addEventListener('keydown', handleKeyUp)
