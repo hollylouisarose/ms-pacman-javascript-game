@@ -24,9 +24,9 @@ const redGhostClass = 'redghost'
 
 // * Scores and positions
 
-let pacmanPosition = 248
+let pacmanPosition = 247
 let totalGameScore = 0
-let redGhostPosition = 132
+let redGhostPosition = 169
 // let blueGhostPosition = 190
 // let pinkGhostPosition = 208
 // let orangeGhostPosition = 210
@@ -50,7 +50,7 @@ function removeRedGhost(){
   cells[redGhostPosition].classList.remove(redGhostClass)
 }
 
-console.log(redGhostPosition)
+
 
 function createGrid() {
   for (let index = 0; index < gridCellCount; index++) {
@@ -261,48 +261,6 @@ function makeSuperFoodPoints(){
   cells[358].classList.add(superFoodPointClass)
 }
 
-let travelDirection = 0
-
-function moveGhosts(){
-  setInterval(() => {
-    removeRedGhost()
-    ghostWallCheck()
-    console.log('checking for walls')
-    if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 1){
-      redGhostPosition ++
-      addRedGhost()
-    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 2){
-      redGhostPosition --
-      addRedGhost()
-    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 3){
-      redGhostPosition -= 20
-      addRedGhost()
-    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 4){
-      redGhostPosition += 20
-      addRedGhost()
-    }
-  }, 1000)
-} 
-
-function ghostWallCheck(){
-  if (cells[redGhostPosition + 1].classList.contains(wallClass)){
-    travelDirection = Math.floor(Math.random() * 4)
-    console.log('changing direction')
-  } else if (cells[redGhostPosition - 1].classList.contains(wallClass)){
-    travelDirection = Math.floor(Math.random() * 4)
-    console.log('changing direction')
-  } else if (cells[redGhostPosition - 20].classList.contains(wallClass)){
-    travelDirection = Math.floor(Math.random() * 4)
-    console.log('changing direction')
-  } else if (cells[redGhostPosition + 20].classList.contains(wallClass)){
-    travelDirection = Math.floor(Math.random() * 4)
-    console.log('changing direction')
-  }
-}
-
-console.log(cells[redGhostPosition])
-console.log(cells[redGhostPosition - 1])
-
 function handleKeyUp(event){
   removePacman()
   const x = pacmanPosition % width
@@ -356,6 +314,59 @@ function scoreCheck(position) {
   }
 }
 
+let ghostMoves = [1, -1, +width, -width]
+let isPathClear = true
+
+function ghostPathCheck(){
+
+  // console.log(cells[redGhostPosition])
+ 
+
+  if (cells[redGhostPosition + 1].classList.contains(wallClass)){
+    isPathClear = false
+  } else if (cells[redGhostPosition - 1].classList.contains(wallClass)){
+    isPathClear = false
+  }
+
+  console.log('checking path', isPathClear)
+
+  if (isPathClear === false){
+    console.log('change direction')
+  }
+}
+
+
+
+function ghostMove(){
+  ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  console.log(ghostMoves)
+  setInterval(() => {
+    ghostPathCheck()
+    if (isPathClear === true && ghostMoves === 1){
+      redGhostPosition ++
+      addRedGhost()
+    } else if (isPathClear === true && ghostMoves === -1){
+      redGhostPosition --
+      addRedGhost()
+    }
+    
+  }, 1000)
+
+}
+
+
+// path array
+// is path clear? Y / N
+// ghost decides a path
+// checks its clear
+// moves
+// if not clear, change direction
+// check path each time not change direction each time
+
+
+
+
+
 
 createGrid()
 addPacman()
@@ -365,7 +376,8 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-// moveGhosts()
+ghostPathCheck()
+// ghostMove()
 
 // * Events
 window.addEventListener('keydown', handleKeyUp)
