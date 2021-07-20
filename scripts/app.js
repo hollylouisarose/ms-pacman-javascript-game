@@ -19,7 +19,7 @@ const portalClass = 'portal'
 const ghostHomeClass = 'ghosthome'
 const redGhostClass = 'redghost'
 // const orangeGhostClass = 'orangeghost'
-// const blueGhostClass = 'blueghost'
+const blueGhostClass = 'blueghost'
 // const pinkGhostClass = 'pinkghost'
 
 // * Scores and positions
@@ -319,55 +319,42 @@ let isPathClear = true
 
 
 function ghostMove(){
-  let ghostRoute = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  console.log(ghostRoute)
+  ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
   setInterval(() => {
-    ghostPathCheck()
-    console.log(ghostRoute)
-    if (isPathClear === false) {
-      ghostRoute = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-      console.log('new direction')
+    if (cells[redGhostPosition + ghostMoves].classList.contains(wallClass)){
+      isPathClear = false
+      console.log('hitting a wall')
     }
-    if (isPathClear === true && ghostRoute === 1){
+
+    if (isPathClear === true && ghostMoves === 1){
       removeRedGhost()
       redGhostPosition += 1
-      console.log(redGhostPosition, ghostRoute)
+  
       addRedGhost()
-    } else if (isPathClear === true && ghostRoute === -1){
+    } else if (isPathClear === true && ghostMoves === -1){
       removeRedGhost()
       redGhostPosition -= 1
-      console.log(redGhostPosition, ghostRoute)
+    
       addRedGhost()
-    } else if (isPathClear === true && ghostRoute === - width){
+    } else if (isPathClear === true && ghostMoves === - width){
       removeRedGhost()
       redGhostPosition -= width
-      console.log(redGhostPosition, ghostRoute)
+    
       addRedGhost()
-    } else if (isPathClear === true && ghostRoute === + width){
+    } else if (isPathClear === true && ghostMoves === + width){
       removeRedGhost()
       redGhostPosition += width
-      console.log(redGhostPosition, ghostRoute)
+    
+      addRedGhost()
+    } else if (isPathClear === false){
+      console.log(redGhostPosition)
+      removeRedGhost()
       addRedGhost()
     }
   } , 1000)
   
 }
 
-function ghostPathCheck(){
-  if (cells[redGhostPosition + 1].classList.contains(wallClass)){
-    isPathClear = false
-  } else if (cells[redGhostPosition - 1].classList.contains(wallClass)){
-    isPathClear = false
-  } else if (cells[redGhostPosition - width].classList.contains(wallClass)){
-    isPathClear = false
-  } else if (cells[redGhostPosition + width].classList.contains(wallClass)){
-    isPathClear = false
-  }
-  console.log('checking path', isPathClear)
-  if (isPathClear === false){
-    return
-  }
-}
 
 // path array
 // is path clear? Y / N
@@ -378,6 +365,10 @@ function ghostPathCheck(){
 // check path each time not change direction each time
 
 // assign a new direction to 
+
+// choose path function
+// pick random path
+// assign that random path to redghost pos
 
 
 
@@ -392,8 +383,7 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-ghostPathCheck()
-// ghostMove()
+ghostMove()
 
 
 // * Events
