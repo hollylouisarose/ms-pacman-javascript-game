@@ -26,7 +26,7 @@ const redGhostClass = 'redghost'
 
 let pacmanPosition = 248
 let totalGameScore = 0
-let redGhostPosition = 188
+let redGhostPosition = 132
 // let blueGhostPosition = 190
 // let pinkGhostPosition = 208
 // let orangeGhostPosition = 210
@@ -243,9 +243,8 @@ function makePortals(){
 function makeFoodPoints(){
   const foodPoints = cells.map(cell =>{
     if (!cell.classList.contains(wallClass) 
-    && !cell.classList.contains('portal')
-    && !cell.classList.contains(pacmanClass)
-    && !cell.classList.contains('ghosthome'))
+    && !cell.classList.contains(portalClass)
+    && !cell.classList.contains(pacmanClass))
       cell.classList.add(foodPointClass)
   })
   return foodPoints
@@ -262,28 +261,47 @@ function makeSuperFoodPoints(){
   cells[358].classList.add(superFoodPointClass)
 }
 
+let travelDirection = 0
+
 function moveGhosts(){
-  let travelDirection = 0
-  travelDirection = setInterval(() => {
-    travelDirection = Math.floor(Math.random() * 4)
+  setInterval(() => {
     removeRedGhost()
-    if (!cells[redGhostPosition].classList.contains(wallClass)){
-      if (travelDirection === 1){
-        redGhostPosition ++
-      } else if (travelDirection === 2){
-        redGhostPosition --
-      } else if (travelDirection === 3){
-        redGhostPosition -= 20
-      } else if (travelDirection === 4){
-        redGhostPosition += 20
-      }
-    } else {
-      clearInterval(travelDirection)
+    ghostWallCheck()
+    console.log('checking for walls')
+    if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 1){
+      redGhostPosition ++
+      addRedGhost()
+    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 2){
+      redGhostPosition --
+      addRedGhost()
+    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 3){
+      redGhostPosition -= 20
+      addRedGhost()
+    } else if (cells[redGhostPosition].classList.contains(foodPointClass) && travelDirection === 4){
+      redGhostPosition += 20
+      addRedGhost()
     }
-    addRedGhost()
-  }, 500)
+  }, 1000)
 } 
 
+function ghostWallCheck(){
+  if (cells[redGhostPosition + 1].classList.contains(wallClass)){
+    travelDirection = Math.floor(Math.random() * 4)
+    console.log('changing direction')
+  } else if (cells[redGhostPosition - 1].classList.contains(wallClass)){
+    travelDirection = Math.floor(Math.random() * 4)
+    console.log('changing direction')
+  } else if (cells[redGhostPosition - 20].classList.contains(wallClass)){
+    travelDirection = Math.floor(Math.random() * 4)
+    console.log('changing direction')
+  } else if (cells[redGhostPosition + 20].classList.contains(wallClass)){
+    travelDirection = Math.floor(Math.random() * 4)
+    console.log('changing direction')
+  }
+}
+
+console.log(cells[redGhostPosition])
+console.log(cells[redGhostPosition - 1])
 
 function handleKeyUp(event){
   removePacman()
@@ -347,7 +365,8 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-moveGhosts()
+// moveGhosts()
 
 // * Events
 window.addEventListener('keydown', handleKeyUp)
+
