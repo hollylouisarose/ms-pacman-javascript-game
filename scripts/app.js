@@ -18,8 +18,8 @@ const superFoodPointClass = 'superfoodpoint'
 const portalClass = 'portal'
 const ghostHomeClass = 'ghosthome'
 const redGhostClass = 'redghost'
-// const orangeGhostClass = 'orangeghost'
-// const blueGhostClass = 'blueghost'
+const blueGhostClass = 'blueghost'
+const orangeGhostClass = 'orangeghost'
 // const pinkGhostClass = 'pinkghost'
 
 // * Scores and positions
@@ -28,9 +28,10 @@ let pacmanPosition = 247
 let totalGameScore = 0
 let lives = 3
 
-// let blueGhostPosition = 190
+let blueGhostPosition = 190
 // let pinkGhostPosition = 208
-// let orangeGhostPosition = 210
+let orangeGhostPosition = 210
+let redGhostPosition = 208
 
 
 // * Functions
@@ -76,7 +77,15 @@ function makeWalls(){
 
   // * horizontal walls
 
-  for (let index = 103; index <= 117; index++) {
+  for (let index = 103; index <= 105; index++) {
+    cells[index].classList.add(wallClass)   
+  }
+
+  for (let index = 108; index <= 111; index++) {
+    cells[index].classList.add(wallClass)   
+  }
+
+  for (let index = 114; index <= 117; index++) {
     cells[index].classList.add(wallClass)   
   }
 
@@ -88,19 +97,19 @@ function makeWalls(){
     cells[index].classList.add(wallClass) 
   }
 
-  for (let index = 201; index <= 205; index++) {
+  for (let index = 202; index <= 205; index++) {
     cells[index].classList.add(wallClass)  
   }
 
-  for (let index = 213; index <= 218; index++) {
+  for (let index = 214; index <= 217; index++) {
     cells[index].classList.add(wallClass)  
   }
 
-  for (let index = 221; index <= 225; index++) {
+  for (let index = 222; index <= 225; index++) {
     cells[index].classList.add(wallClass)
   }
 
-  for (let index = 233; index <= 238; index++) {
+  for (let index = 234; index <= 237; index++) {
     cells[index].classList.add(wallClass) 
   }
 
@@ -320,7 +329,8 @@ function portalCheck(position) {
 }
 
 function gameOver(position){
-  if (cells[position].classList.contains(redGhostClass)){
+  if (cells[position].classList.contains(redGhostClass) &&
+  cells[position].classList.contains(redGhostClass)){
     console.log('gameover')
     console.log(lives = lives - 1)
   }
@@ -346,8 +356,9 @@ function gameOver(position){
 
 
 let isPathClear = true
-let redGhostPosition = 208
 let ghostMoves = [1, -1, -width, +width]
+
+// * red ghost
 
 function addRedGhost(){
   cells[redGhostPosition].classList.add(redGhostClass)
@@ -357,16 +368,15 @@ function removeRedGhost(){
   cells[redGhostPosition].classList.remove(redGhostClass)
 }
 
-function ghostMove(){
-
+function redGhostMove(){
   let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
   console.log('first ghost move', ghostPath)
   removeRedGhost()
   setInterval(() => {
-    pathCheck(ghostPath)
+    redPathCheck(ghostPath)
     if (isPathClear === false){
       ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-      pathCheck(ghostPath)
+      redPathCheck(ghostPath)
     }
     if (isPathClear === true && ghostPath === 1){
       removeRedGhost()
@@ -385,35 +395,133 @@ function ghostMove(){
       redGhostPosition += width
       addRedGhost()
     } 
-  } , 1000)
+  } , 200)
   addRedGhost()
-  
 }
 
-function pathCheck(ghostPath){
+function redPathCheck(ghostPath){
   if (cells[redGhostPosition + ghostPath].classList.contains(wallClass)){
     isPathClear = false
-    console.log('running')
-    // console.log('wall')
-    // ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-    // console.log('new direction')
-    // isPathClear === true
-    // console.log('im moving again')
+  } else {
+    isPathClear = true
+  }
+}
+
+// * blue ghost
+
+function addBlueGhost(){
+  cells[blueGhostPosition].classList.add(blueGhostClass)
+}
+
+function removeBlueGhost(){
+  cells[blueGhostPosition].classList.remove(blueGhostClass)
+}
+
+function blueGhostMove(){
+  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  console.log('first ghost move', ghostPath)
+  removeBlueGhost()
+  setInterval(() => {
+    bluePathCheck(ghostPath)
+    if (isPathClear === false){
+      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+      bluePathCheck(ghostPath)
+    }
+    if (isPathClear === true && ghostPath === 1){
+      removeBlueGhost()
+      blueGhostPosition += 1
+      addBlueGhost()
+    } else if (isPathClear === true && ghostPath === -1){
+      removeBlueGhost()
+      blueGhostPosition -= 1
+      addBlueGhost()
+    } else if (isPathClear === true && ghostPath === - width){
+      removeBlueGhost()
+      blueGhostPosition -= width
+      addBlueGhost()
+    } else if (isPathClear === true && ghostPath === + width){
+      removeBlueGhost()
+      blueGhostPosition += width
+      addBlueGhost()
+    } 
+  } , 200)
+  addBlueGhost()
+}
+
+function bluePathCheck(ghostPath){
+  if (cells[blueGhostPosition + ghostPath].classList.contains(wallClass)){
+    isPathClear = false
   } else {
     isPathClear = true
   }
 }
 
 
+// * orange ghost
+
+function addOrangeGhost(){
+  cells[orangeGhostPosition].classList.add(orangeGhostClass)
+}
+
+function removeOrangeGhost(){
+  cells[orangeGhostPosition].classList.remove(orangeGhostClass)
+}
+
+function orangeGhostMove(){
+  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  console.log('first ghost move', ghostPath)
+  removeOrangeGhost()
+  setInterval(() => {
+    orangePathCheck(ghostPath)
+    if (isPathClear === false){
+      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+      orangePathCheck(ghostPath)
+    }
+    if (isPathClear === true && ghostPath === 1){
+      removeOrangeGhost()
+      orangeGhostPosition += 1
+      addOrangeGhost()
+    } else if (isPathClear === true && ghostPath === -1){
+      removeOrangeGhost()
+      orangeGhostPosition -= 1
+      addOrangeGhost()
+    } else if (isPathClear === true && ghostPath === - width){
+      removeOrangeGhost()
+      orangeGhostPosition -= width
+      addOrangeGhost()
+    } else if (isPathClear === true && ghostPath === + width){
+      removeOrangeGhost()
+      orangeGhostPosition += width
+      addOrangeGhost()
+    } 
+  } , 200)
+  addOrangeGhost()
+}
+
+function orangePathCheck(ghostPath){
+  if (cells[orangeGhostPosition + ghostPath].classList.contains(wallClass)){
+    isPathClear = false
+  } else {
+    isPathClear = true
+  }
+}
+
+
+
+
 createGrid()
 addPacman()
 addRedGhost()
+addBlueGhost()
+addOrangeGhost()
 makeWalls()
 makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-ghostMove()
+redGhostMove()
+blueGhostMove()
+orangeGhostMove()
 
 
 
