@@ -20,7 +20,7 @@ const ghostHomeClass = 'ghosthome'
 const redGhostClass = 'redghost'
 const blueGhostClass = 'blueghost'
 const orangeGhostClass = 'orangeghost'
-// const pinkGhostClass = 'pinkghost'
+const pinkGhostClass = 'pinkghost'
 
 // * Scores and positions
 
@@ -28,8 +28,8 @@ let pacmanPosition = 247
 let totalGameScore = 0
 let lives = 3
 
-let blueGhostPosition = 190
-// let pinkGhostPosition = 208
+let blueGhostPosition = 170
+let pinkGhostPosition = 168
 let orangeGhostPosition = 210
 let redGhostPosition = 208
 
@@ -329,8 +329,10 @@ function portalCheck(position) {
 }
 
 function gameOver(position){
-  if (cells[position].classList.contains(redGhostClass) &&
-  cells[position].classList.contains(redGhostClass)){
+  if (cells[position].classList.contains(redGhostClass) ||
+  cells[position].classList.contains(blueGhostClass) ||
+  cells[position].classList.contains(orangeGhostClass) ||
+  cells[position].classList.contains(pinkGhostClass)){
     console.log('gameover')
     console.log(lives = lives - 1)
   }
@@ -469,7 +471,6 @@ function removeOrangeGhost(){
 
 function orangeGhostMove(){
   let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  console.log('first ghost move', ghostPath)
   removeOrangeGhost()
   setInterval(() => {
     orangePathCheck(ghostPath)
@@ -506,6 +507,55 @@ function orangePathCheck(ghostPath){
   }
 }
 
+// * pink ghost 
+
+function addPinkGhost(){
+  cells[pinkGhostPosition].classList.add(pinkGhostClass)
+}
+
+function removePinkGhost(){
+  cells[pinkGhostPosition].classList.remove(pinkGhostClass)
+}
+
+
+function pinkGhostMove(){
+  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  removePinkGhost()
+  setInterval(() => {
+    pinkPathCheck(ghostPath)
+    if (isPathClear === false){
+      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+      pinkPathCheck(ghostPath)
+    }
+    if (isPathClear === true && ghostPath === 1){
+      removePinkGhost()
+      pinkGhostPosition += 1
+      addPinkGhost()
+    } else if (isPathClear === true && ghostPath === -1){
+      removePinkGhost()
+      pinkGhostPosition -= 1
+      addPinkGhost()
+    } else if (isPathClear === true && ghostPath === - width){
+      removePinkGhost()
+      pinkGhostPosition -= width
+      addPinkGhost()
+    } else if (isPathClear === true && ghostPath === + width){
+      removePinkGhost()
+      pinkGhostPosition += width
+      addPinkGhost()
+    } 
+  } , 200)
+  addOrangeGhost()
+}
+
+function pinkPathCheck(ghostPath){
+  if (cells[pinkGhostPosition + ghostPath].classList.contains(wallClass)){
+    isPathClear = false
+  } else {
+    isPathClear = true
+  }
+}
+
 
 
 
@@ -514,6 +564,7 @@ addPacman()
 addRedGhost()
 addBlueGhost()
 addOrangeGhost()
+addPinkGhost()
 makeWalls()
 makeGhostHome()
 makePortals()
@@ -522,6 +573,8 @@ makeSuperFoodPoints()
 redGhostMove()
 blueGhostMove()
 orangeGhostMove()
+pinkGhostMove()
+
 
 
 
