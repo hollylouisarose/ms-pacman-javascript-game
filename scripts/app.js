@@ -19,14 +19,14 @@ const portalClass = 'portal'
 const ghostHomeClass = 'ghosthome'
 const redGhostClass = 'redghost'
 // const orangeGhostClass = 'orangeghost'
-const blueGhostClass = 'blueghost'
+// const blueGhostClass = 'blueghost'
 // const pinkGhostClass = 'pinkghost'
 
 // * Scores and positions
 
 let pacmanPosition = 247
 let totalGameScore = 0
-let redGhostPosition = 169
+
 // let blueGhostPosition = 190
 // let pinkGhostPosition = 208
 // let orangeGhostPosition = 210
@@ -41,15 +41,6 @@ function addPacman(){
 function removePacman(){
   cells[pacmanPosition].classList.remove(pacmanClass)
 }
-
-function addRedGhost(){
-  cells[redGhostPosition].classList.add(redGhostClass)
-}
-
-function removeRedGhost(){
-  cells[redGhostPosition].classList.remove(redGhostClass)
-}
-
 
 
 function createGrid() {
@@ -271,24 +262,28 @@ function handleKeyUp(event){
       if (x < width - 2 && wallCheck(pacmanPosition + 1)){
         pacmanPosition ++ 
         scoreCheck(pacmanPosition)
+        gameOver(pacmanPosition)
       } 
       break
     case 37: 
       if (x > 1 && wallCheck(pacmanPosition - 1)){
         pacmanPosition --
         scoreCheck(pacmanPosition)
+        gameOver(pacmanPosition)
       } 
       break
     case 38:
       if (y > 1 && wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
         scoreCheck(pacmanPosition)
+        gameOver(pacmanPosition)
       }
       break 
     case 40:
       if (y < width - 2 && wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
         scoreCheck(pacmanPosition)
+        gameOver(pacmanPosition)
       }
       break
   }
@@ -314,9 +309,43 @@ function scoreCheck(position) {
   }
 }
 
+function gameOver(position){
+  if (cells[position].classList.contains(redGhostClass)){
+    console.log('gameover')
+  }
+}
+
+
+class makeGhost {
+  constructor(name, position){
+    this.name = name
+    this.position = position
+  }
+}
+
+const ghostArray = [
+  new  makeGhost('redghost', 208) ,
+  new makeGhost('blueghost', 210)
+]
+
+const ghostPosition = ghostArray.forEach(ghost =>{
+  return ghost.position
+})
+
+console.log(ghostPosition)
+
+
 let ghostMoves = [1, -1, +width, -width]
 let isPathClear = true
+let redGhostPosition = 208
 
+function addRedGhost(){
+  cells[redGhostPosition].classList.add(redGhostClass)
+}
+
+function removeRedGhost(){
+  cells[redGhostPosition].classList.remove(redGhostClass)
+}
 
 function ghostMove(){
   ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
@@ -325,54 +354,30 @@ function ghostMove(){
       isPathClear = false
       console.log('hitting a wall')
     }
-
     if (isPathClear === true && ghostMoves === 1){
       removeRedGhost()
       redGhostPosition += 1
-  
       addRedGhost()
     } else if (isPathClear === true && ghostMoves === -1){
       removeRedGhost()
       redGhostPosition -= 1
-    
       addRedGhost()
     } else if (isPathClear === true && ghostMoves === - width){
       removeRedGhost()
       redGhostPosition -= width
-    
       addRedGhost()
     } else if (isPathClear === true && ghostMoves === + width){
       removeRedGhost()
       redGhostPosition += width
-    
       addRedGhost()
     } else if (isPathClear === false){
-      console.log(redGhostPosition)
       removeRedGhost()
+      // can change redGhost pos here 
       addRedGhost()
     }
   } , 1000)
-  
+
 }
-
-
-// path array
-// is path clear? Y / N
-// ghost decides a path
-// checks its clear
-// moves
-// if not clear, change direction
-// check path each time not change direction each time
-
-// assign a new direction to 
-
-// choose path function
-// pick random path
-// assign that random path to redghost pos
-
-
-
-
 
 
 createGrid()
