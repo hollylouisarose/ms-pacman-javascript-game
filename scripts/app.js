@@ -26,6 +26,7 @@ const redGhostClass = 'redghost'
 
 let pacmanPosition = 247
 let totalGameScore = 0
+let lives = 3
 
 // let blueGhostPosition = 190
 // let pinkGhostPosition = 208
@@ -263,6 +264,7 @@ function handleKeyUp(event){
         pacmanPosition ++ 
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
+        portalCheck(pacmanPosition)
       } 
       break
     case 37: 
@@ -270,6 +272,7 @@ function handleKeyUp(event){
         pacmanPosition --
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
+        portalCheck(pacmanPosition)
       } 
       break
     case 38:
@@ -277,6 +280,7 @@ function handleKeyUp(event){
         pacmanPosition -= width
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
+        portalCheck(pacmanPosition)
       }
       break 
     case 40:
@@ -284,6 +288,7 @@ function handleKeyUp(event){
         pacmanPosition += width
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
+        portalCheck(pacmanPosition)
       }
       break
   }
@@ -309,35 +314,40 @@ function scoreCheck(position) {
   }
 }
 
+function portalCheck(position) {
+  // portal check to go here
+  cells[position]
+}
+
 function gameOver(position){
   if (cells[position].classList.contains(redGhostClass)){
     console.log('gameover')
+    console.log(lives = lives - 1)
+  }
+  if (lives === 0){
+    grid.style.display = 'none'
+    console.log('reload page')
   }
 }
 
+// todo: make ghost classes and ghost array? 
+// todo: Then hopefully won't need to write separate functions..
+// class makeGhost {
+//   constructor(name, position){
+//     this.name = name
+//     this.position = position
+//   }
+// }
 
-class makeGhost {
-  constructor(name, position){
-    this.name = name
-    this.position = position
-  }
-}
-
-const ghostArray = [
-  new  makeGhost('redghost', 208) ,
-  new makeGhost('blueghost', 210)
-]
-
-const ghostPosition = ghostArray.forEach(ghost =>{
-  return ghost.position
-})
-
-console.log(ghostPosition)
+// const ghostArray = [
+//   new makeGhost('redghost', 208) ,
+//   new makeGhost('blueghost', 210)
+// ]
 
 
-let ghostMoves = [1, -1, +width, -width]
 let isPathClear = true
 let redGhostPosition = 208
+let ghostMoves = [1, -1, -width, +width]
 
 function addRedGhost(){
   cells[redGhostPosition].classList.add(redGhostClass)
@@ -348,35 +358,50 @@ function removeRedGhost(){
 }
 
 function ghostMove(){
-  ghostMoves = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+
+  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  console.log('first ghost move', ghostPath)
+  removeRedGhost()
   setInterval(() => {
-    if (cells[redGhostPosition + ghostMoves].classList.contains(wallClass)){
-      isPathClear = false
-      console.log('hitting a wall')
+    pathCheck(ghostPath)
+    if (isPathClear === false){
+      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+      pathCheck(ghostPath)
     }
-    if (isPathClear === true && ghostMoves === 1){
+    if (isPathClear === true && ghostPath === 1){
       removeRedGhost()
       redGhostPosition += 1
       addRedGhost()
-    } else if (isPathClear === true && ghostMoves === -1){
+    } else if (isPathClear === true && ghostPath === -1){
       removeRedGhost()
       redGhostPosition -= 1
       addRedGhost()
-    } else if (isPathClear === true && ghostMoves === - width){
+    } else if (isPathClear === true && ghostPath === - width){
       removeRedGhost()
       redGhostPosition -= width
       addRedGhost()
-    } else if (isPathClear === true && ghostMoves === + width){
+    } else if (isPathClear === true && ghostPath === + width){
       removeRedGhost()
       redGhostPosition += width
       addRedGhost()
-    } else if (isPathClear === false){
-      removeRedGhost()
-      // can change redGhost pos here 
-      addRedGhost()
-    }
+    } 
   } , 1000)
+  addRedGhost()
+  
+}
 
+function pathCheck(ghostPath){
+  if (cells[redGhostPosition + ghostPath].classList.contains(wallClass)){
+    isPathClear = false
+    console.log('running')
+    // console.log('wall')
+    // ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+    // console.log('new direction')
+    // isPathClear === true
+    // console.log('im moving again')
+  } else {
+    isPathClear = true
+  }
 }
 
 
@@ -389,6 +414,7 @@ makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
 ghostMove()
+
 
 
 // * Events
