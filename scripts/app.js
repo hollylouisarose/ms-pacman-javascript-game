@@ -337,7 +337,10 @@ function addScaredState(){
 }
 
 function pacManHitsGhost(position){
-  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) ){
+  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) ||
+  cells[position].classList.contains(blueGhostClass) && cells[position].classList.contains(pacmanClass) ||
+  cells[position].classList.contains(orangeGhostClass) && cells[position].classList.contains(pacmanClass) ||
+  cells[position].classList.contains(pinkGhostClass) && cells[position].classList.contains(pacmanClass) ){
     lives = lives - 1
     console.log('pacman check',lives)
   }
@@ -345,8 +348,6 @@ function pacManHitsGhost(position){
     gameOver()
   }
 }
-
-
 
 
 function gameOver(){
@@ -374,7 +375,6 @@ function removeRedGhost(){
 function redGhostMove(){
   setTimeout(() => {
     let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-    console.log('first ghost move', ghostPath)
     removeRedGhost()
     setInterval(() => {
       redPathCheck(ghostPath)
@@ -426,10 +426,10 @@ function removeBlueGhost(){
 function blueGhostMove(){
   setTimeout(() => {
     let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-    console.log('first ghost move', ghostPath)
     removeBlueGhost()
     setInterval(() => {
       bluePathCheck(ghostPath)
+      pacManHitsGhost(blueGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         bluePathCheck(ghostPath)
@@ -481,6 +481,7 @@ function orangeGhostMove(){
     removeOrangeGhost()
     setInterval(() => {
       orangePathCheck(ghostPath)
+      pacManHitsGhost(orangeGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         orangePathCheck(ghostPath)
@@ -532,6 +533,7 @@ function pinkGhostMove(){
     removePinkGhost()
     setInterval(() => {
       pinkPathCheck(ghostPath)
+      pacManHitsGhost(pinkGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         pinkPathCheck(ghostPath)
@@ -577,10 +579,10 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-// redGhostMove()
-// blueGhostMove()
-// orangeGhostMove()
-// pinkGhostMove()
+redGhostMove()
+blueGhostMove()
+orangeGhostMove()
+pinkGhostMove()
 
 
 // * Events
