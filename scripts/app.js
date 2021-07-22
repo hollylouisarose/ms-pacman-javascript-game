@@ -264,12 +264,10 @@ function makeSuperFoodPoints(){
 
 function handleKeyUp(event){
   removePacman()
-  const x = pacmanPosition % width
-  const y = Math.floor(pacmanPosition / width) 
   gameScore.innerHTML = totalGameScore
   switch (event.keyCode) {
     case 39:
-      if (x < width - 2 && wallCheck(pacmanPosition + 1)){
+      if (wallCheck(pacmanPosition + 1)){
         pacmanPosition ++ 
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
@@ -277,7 +275,7 @@ function handleKeyUp(event){
       } 
       break
     case 37: 
-      if (x > 1 && wallCheck(pacmanPosition - 1)){
+      if ( wallCheck(pacmanPosition - 1)){
         pacmanPosition --
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
@@ -285,19 +283,17 @@ function handleKeyUp(event){
       } 
       break
     case 38:
-      if (y > 1 && wallCheck(pacmanPosition - 20)) {
+      if (wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
-        portalCheck(pacmanPosition)
       }
       break 
     case 40:
-      if (y < width - 2 && wallCheck(pacmanPosition + 20)){
+      if (wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
         scoreCheck(pacmanPosition)
         gameOver(pacmanPosition)
-        portalCheck(pacmanPosition)
       }
       break
   }
@@ -308,6 +304,17 @@ function wallCheck(position) {
   return !cells[position].classList.contains(wallClass)
 }
 
+function portalCheck(position){
+  if (cells[position] === cells[160]){
+    console.log('at the portal')
+  } else if (cells[position] === cells[179]){
+    console.log('at the portal')
+  } else if (cells[position] === cells[180]){
+    console.log('at the portal')
+  } else if (cells[position] === cells[199]){
+    console.log('at the portal')
+  }
+}
 
 function scoreCheck(position) {
   if (cells[position].classList.contains(foodPointClass)){
@@ -317,25 +324,39 @@ function scoreCheck(position) {
     cells[pacmanPosition].classList.remove(superFoodPointClass)
     totalGameScore = totalGameScore + 50 
     console.log('superpoint!')
+    isScared()
+  } else if (cells[position].classList.contains(superFoodPointClass) &&
+  cells[position].classList.contains('scared')){
+    console.log('200 points')
   } else if (!cells[position].classList.contains(foodPointClass) ||
             !cells[position].classList.contains(superFoodPointClass)){
     return
   }
 }
 
-function portalCheck(position) {
-  // portal check to go here
-  cells[position]
+function isScared(){
+  cells[redGhostPosition].classList.add('scared')
+  cells[blueGhostPosition].classList.add('scared')
+  cells[orangeGhostPosition].classList.add('scared')
+  cells[pinkGhostPosition].classList.add('scared')
+  console.log('added class',cells[redGhostPosition], cells[blueGhostPosition], 
+    cells[orangeGhostPosition], cells[pinkGhostPosition])
+  setTimeout(() => {
+    cells[redGhostPosition].classList.remove('scared')
+    cells[blueGhostPosition].classList.remove('scared')
+    cells[orangeGhostPosition].classList.remove('scared')
+    cells[pinkGhostPosition].classList.remove('scared')
+    console.log('removed class',cells[redGhostPosition], cells[blueGhostPosition], 
+      cells[orangeGhostPosition], cells[pinkGhostPosition])
+  }, 5000)
 }
 
 function gameOver(position){
-  if (cells[position].classList.contains(redGhostClass) ||
-  cells[position].classList.contains(blueGhostClass) ||
-  cells[position].classList.contains(orangeGhostClass) ||
-  cells[position].classList.contains(pinkGhostClass)){
+  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) 
+  && !cells[position].classList.contains('scared')){
     console.log('gameover')
     console.log(lives = lives - 1)
-  }
+  } 
   if (lives === 0){
     grid.style.display = 'none'
     console.log('reload page')
@@ -376,6 +397,7 @@ function redGhostMove(){
   removeRedGhost()
   setInterval(() => {
     redPathCheck(ghostPath)
+    gameOver(redGhostPosition)
     if (isPathClear === false){
       ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
       redPathCheck(ghostPath)
@@ -397,7 +419,7 @@ function redGhostMove(){
       redGhostPosition += width
       addRedGhost()
     } 
-  } , 200)
+  } , 500)
   addRedGhost()
 }
 
@@ -408,7 +430,7 @@ function redPathCheck(ghostPath){
     isPathClear = true
   }
 }
-
+  
 // * blue ghost
 
 function addBlueGhost(){
@@ -446,7 +468,7 @@ function blueGhostMove(){
       blueGhostPosition += width
       addBlueGhost()
     } 
-  } , 200)
+  } , 500)
   addBlueGhost()
 }
 
@@ -495,7 +517,7 @@ function orangeGhostMove(){
       orangeGhostPosition += width
       addOrangeGhost()
     } 
-  } , 200)
+  } , 500)
   addOrangeGhost()
 }
 
@@ -544,7 +566,7 @@ function pinkGhostMove(){
       pinkGhostPosition += width
       addPinkGhost()
     } 
-  } , 200)
+  } , 500)
   addOrangeGhost()
 }
 
@@ -555,8 +577,6 @@ function pinkPathCheck(ghostPath){
     isPathClear = true
   }
 }
-
-
 
 
 createGrid()
@@ -571,13 +591,10 @@ makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
 redGhostMove()
-blueGhostMove()
-orangeGhostMove()
-pinkGhostMove()
-
-
+// blueGhostMove()
+// orangeGhostMove()
+// pinkGhostMove()
 
 
 // * Events
 window.addEventListener('keydown', handleKeyUp)
-

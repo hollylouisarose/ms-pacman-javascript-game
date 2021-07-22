@@ -77,7 +77,8 @@ body {
 .redghost{
   background-image: url('../images/redghost.png');
   background-repeat: no-repeat;
-  background-size: contain; 
+  background-size: contain;
+  z-index: 1; 
 }
 
 .orangeghost{
