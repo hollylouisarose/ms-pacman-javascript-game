@@ -270,30 +270,29 @@ function handleKeyUp(event){
       if (wallCheck(pacmanPosition + 1)){
         pacmanPosition ++ 
         scoreCheck(pacmanPosition)
-        gameOver(pacmanPosition)
-        portalCheck(pacmanPosition)
+        pacManHitsGhost(pacmanPosition)
+        cells[pacmanPosition].classList.add('move-left')
       } 
       break
     case 37: 
       if ( wallCheck(pacmanPosition - 1)){
         pacmanPosition --
         scoreCheck(pacmanPosition)
-        gameOver(pacmanPosition)
-        portalCheck(pacmanPosition)
+        pacManHitsGhost(pacmanPosition)
       } 
       break
     case 38:
       if (wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
         scoreCheck(pacmanPosition)
-        gameOver(pacmanPosition)
+        pacManHitsGhost(pacmanPosition)
       }
       break 
     case 40:
       if (wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
         scoreCheck(pacmanPosition)
-        gameOver(pacmanPosition)
+        pacManHitsGhost(pacmanPosition)
       }
       break
   }
@@ -304,18 +303,6 @@ function wallCheck(position) {
   return !cells[position].classList.contains(wallClass)
 }
 
-function portalCheck(position){
-  if (cells[position] === cells[160]){
-    console.log('at the portal')
-  } else if (cells[position] === cells[179]){
-    console.log('at the portal')
-  } else if (cells[position] === cells[180]){
-    console.log('at the portal')
-  } else if (cells[position] === cells[199]){
-    console.log('at the portal')
-  }
-}
-
 function scoreCheck(position) {
   if (cells[position].classList.contains(foodPointClass)){
     cells[pacmanPosition].classList.remove(foodPointClass)
@@ -324,17 +311,15 @@ function scoreCheck(position) {
     cells[pacmanPosition].classList.remove(superFoodPointClass)
     totalGameScore = totalGameScore + 50 
     console.log('superpoint!')
-    isScared()
-  } else if (cells[position].classList.contains(superFoodPointClass) &&
-  cells[position].classList.contains('scared')){
-    console.log('200 points')
+    addScaredState()
   } else if (!cells[position].classList.contains(foodPointClass) ||
             !cells[position].classList.contains(superFoodPointClass)){
     return
   }
 }
 
-function isScared(){
+
+function addScaredState(){
   cells[redGhostPosition].classList.add('scared')
   cells[blueGhostPosition].classList.add('scared')
   cells[orangeGhostPosition].classList.add('scared')
@@ -351,19 +336,20 @@ function isScared(){
   }, 5000)
 }
 
-function gameOver(position){
-  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) 
-    && !cells[position].classList.contains('scared') || 
-    cells[position].classList.contains(blueGhostClass) && cells[position].classList.contains(pacmanClass) 
-    && !cells[position].classList.contains('scared') || 
-    cells[position].classList.contains(orangeGhostClass) && cells[position].classList.contains(pacmanClass) 
-    && !cells[position].classList.contains('scared') || 
-    cells[position].classList.contains(pinkGhostClass) && cells[position].classList.contains(pacmanClass) 
-    && !cells[position].classList.contains('scared') 
-  ){
-    console.log('life lost!')
-    console.log(lives = lives - 1)
-  } 
+function pacManHitsGhost(position){
+  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) ){
+    lives = lives - 1
+    console.log('pacman check',lives)
+  }
+  if (lives === 0){
+    gameOver()
+  }
+}
+
+
+
+
+function gameOver(){
   if (lives === 0){
     removePacman()
     grid.style.display = 'none'
@@ -386,35 +372,37 @@ function removeRedGhost(){
 }
 
 function redGhostMove(){
-  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  console.log('first ghost move', ghostPath)
-  removeRedGhost()
-  setInterval(() => {
-    redPathCheck(ghostPath)
-    gameOver(redGhostPosition)
-    if (isPathClear === false){
-      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  setTimeout(() => {
+    let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+    console.log('first ghost move', ghostPath)
+    removeRedGhost()
+    setInterval(() => {
       redPathCheck(ghostPath)
-    }
-    if (isPathClear === true && ghostPath === 1){
-      removeRedGhost()
-      redGhostPosition += 1
-      addRedGhost()
-    } else if (isPathClear === true && ghostPath === -1){
-      removeRedGhost()
-      redGhostPosition -= 1
-      addRedGhost()
-    } else if (isPathClear === true && ghostPath === - width){
-      removeRedGhost()
-      redGhostPosition -= width
-      addRedGhost()
-    } else if (isPathClear === true && ghostPath === + width){
-      removeRedGhost()
-      redGhostPosition += width
-      addRedGhost()
-    } 
-  } , 200)
-  addRedGhost()
+      pacManHitsGhost(redGhostPosition)
+      if (isPathClear === false){
+        ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+        redPathCheck(ghostPath)
+      }
+      if (isPathClear === true && ghostPath === 1){
+        removeRedGhost()
+        redGhostPosition += 1
+        addRedGhost()
+      } else if (isPathClear === true && ghostPath === -1){
+        removeRedGhost()
+        redGhostPosition -= 1
+        addRedGhost()
+      } else if (isPathClear === true && ghostPath === - width){
+        removeRedGhost()
+        redGhostPosition -= width
+        addRedGhost()
+      } else if (isPathClear === true && ghostPath === + width){
+        removeRedGhost()
+        redGhostPosition += width
+        addRedGhost()
+      } 
+    } , 200)
+    addRedGhost()
+  }, 100)
 }
 
 function redPathCheck(ghostPath){
@@ -436,35 +424,36 @@ function removeBlueGhost(){
 }
 
 function blueGhostMove(){
-  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  console.log('first ghost move', ghostPath)
-  removeBlueGhost()
-  setInterval(() => {
-    bluePathCheck(ghostPath)
-    gameOver(blueGhostPosition)
-    if (isPathClear === false){
-      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  setTimeout(() => {
+    let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+    console.log('first ghost move', ghostPath)
+    removeBlueGhost()
+    setInterval(() => {
       bluePathCheck(ghostPath)
-    }
-    if (isPathClear === true && ghostPath === 1){
-      removeBlueGhost()
-      blueGhostPosition += 1
-      addBlueGhost()
-    } else if (isPathClear === true && ghostPath === -1){
-      removeBlueGhost()
-      blueGhostPosition -= 1
-      addBlueGhost()
-    } else if (isPathClear === true && ghostPath === - width){
-      removeBlueGhost()
-      blueGhostPosition -= width
-      addBlueGhost()
-    } else if (isPathClear === true && ghostPath === + width){
-      removeBlueGhost()
-      blueGhostPosition += width
-      addBlueGhost()
-    } 
-  } , 200)
-  addBlueGhost()
+      if (isPathClear === false){
+        ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+        bluePathCheck(ghostPath)
+      }
+      if (isPathClear === true && ghostPath === 1){
+        removeBlueGhost()
+        blueGhostPosition += 1
+        addBlueGhost()
+      } else if (isPathClear === true && ghostPath === -1){
+        removeBlueGhost()
+        blueGhostPosition -= 1
+        addBlueGhost()
+      } else if (isPathClear === true && ghostPath === - width){
+        removeBlueGhost()
+        blueGhostPosition -= width
+        addBlueGhost()
+      } else if (isPathClear === true && ghostPath === + width){
+        removeBlueGhost()
+        blueGhostPosition += width
+        addBlueGhost()
+      } 
+    } , 150)
+    addBlueGhost()
+  }, 600)
 }
 
 function bluePathCheck(ghostPath){
@@ -487,34 +476,35 @@ function removeOrangeGhost(){
 }
 
 function orangeGhostMove(){
-  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  removeOrangeGhost()
-  setInterval(() => {
-    orangePathCheck(ghostPath)
-    gameOver(orangeGhostPosition)
-    if (isPathClear === false){
-      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  setTimeout(() => {
+    let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+    removeOrangeGhost()
+    setInterval(() => {
       orangePathCheck(ghostPath)
-    }
-    if (isPathClear === true && ghostPath === 1){
-      removeOrangeGhost()
-      orangeGhostPosition += 1
-      addOrangeGhost()
-    } else if (isPathClear === true && ghostPath === -1){
-      removeOrangeGhost()
-      orangeGhostPosition -= 1
-      addOrangeGhost()
-    } else if (isPathClear === true && ghostPath === - width){
-      removeOrangeGhost()
-      orangeGhostPosition -= width
-      addOrangeGhost()
-    } else if (isPathClear === true && ghostPath === + width){
-      removeOrangeGhost()
-      orangeGhostPosition += width
-      addOrangeGhost()
-    } 
-  } , 200)
-  addOrangeGhost()
+      if (isPathClear === false){
+        ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+        orangePathCheck(ghostPath)
+      }
+      if (isPathClear === true && ghostPath === 1){
+        removeOrangeGhost()
+        orangeGhostPosition += 1
+        addOrangeGhost()
+      } else if (isPathClear === true && ghostPath === -1){
+        removeOrangeGhost()
+        orangeGhostPosition -= 1
+        addOrangeGhost()
+      } else if (isPathClear === true && ghostPath === - width){
+        removeOrangeGhost()
+        orangeGhostPosition -= width
+        addOrangeGhost()
+      } else if (isPathClear === true && ghostPath === + width){
+        removeOrangeGhost()
+        orangeGhostPosition += width
+        addOrangeGhost()
+      } 
+    } , 300)
+    addOrangeGhost()
+  }, 900)
 }
 
 function orangePathCheck(ghostPath){
@@ -537,34 +527,35 @@ function removePinkGhost(){
 
 
 function pinkGhostMove(){
-  let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
-  removePinkGhost()
-  setInterval(() => {
-    pinkPathCheck(ghostPath)
-    gameOver(pinkGhostPosition)
-    if (isPathClear === false){
-      ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+  setTimeout(() => {
+    let ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+    removePinkGhost()
+    setInterval(() => {
       pinkPathCheck(ghostPath)
-    }
-    if (isPathClear === true && ghostPath === 1){
-      removePinkGhost()
-      pinkGhostPosition += 1
-      addPinkGhost()
-    } else if (isPathClear === true && ghostPath === -1){
-      removePinkGhost()
-      pinkGhostPosition -= 1
-      addPinkGhost()
-    } else if (isPathClear === true && ghostPath === - width){
-      removePinkGhost()
-      pinkGhostPosition -= width
-      addPinkGhost()
-    } else if (isPathClear === true && ghostPath === + width){
-      removePinkGhost()
-      pinkGhostPosition += width
-      addPinkGhost()
-    } 
-  } , 200)
-  addPinkGhost()
+      if (isPathClear === false){
+        ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
+        pinkPathCheck(ghostPath)
+      }
+      if (isPathClear === true && ghostPath === 1){
+        removePinkGhost()
+        pinkGhostPosition += 1
+        addPinkGhost()
+      } else if (isPathClear === true && ghostPath === -1){
+        removePinkGhost()
+        pinkGhostPosition -= 1
+        addPinkGhost()
+      } else if (isPathClear === true && ghostPath === - width){
+        removePinkGhost()
+        pinkGhostPosition -= width
+        addPinkGhost()
+      } else if (isPathClear === true && ghostPath === + width){
+        removePinkGhost()
+        pinkGhostPosition += width
+        addPinkGhost()
+      } 
+    } , 200)
+    addPinkGhost()
+  }, 750)
 }
 
 function pinkPathCheck(ghostPath){
@@ -586,11 +577,10 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-redGhostMove()
-blueGhostMove()
-orangeGhostMove()
-pinkGhostMove()
-
+// redGhostMove()
+// blueGhostMove()
+// orangeGhostMove()
+// pinkGhostMove()
 
 
 // * Events

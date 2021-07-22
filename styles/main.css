@@ -23,6 +23,8 @@ body {
   background-image: url('../images/testpm.png');
   background-repeat: no-repeat;
   background-size: contain;
+  animation: moveLeft 5s linear infinite;
+  position: absolute
 }
 
 .grid-wrapper {
@@ -48,6 +50,7 @@ body {
   flex-grow: 1;
   height: 5%;
   width: 5%;
+  position: relative;
 }
 
 .game-over {
