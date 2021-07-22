@@ -2,12 +2,16 @@
 
 const grid = document.querySelector('.grid')
 const gameScore = document.getElementById('#score')
+const livesDisplay = document.getElementById('#lives')
+const gameOverMessage = document.querySelector('.game-over')
+const playAgainButton = document.querySelector('.game-over button')
 
 // * Game Variables
 
 const width = 20
 const gridCellCount = width * width
 const cells = []
+const liveList = []
 
 // * CSS Classes
 
@@ -27,12 +31,13 @@ const pinkGhostClass = 'pinkghost'
 let pacmanPosition = 247
 let totalGameScore = 0
 let lives = 3
+let isPathClear = true
+let ghostMoves = [1, -1, -width, +width]
 
 let blueGhostPosition = 170
 let pinkGhostPosition = 168
 let orangeGhostPosition = 210
 let redGhostPosition = 208
-
 
 // * Functions
 
@@ -43,7 +48,6 @@ function addPacman(){
 function removePacman(){
   cells[pacmanPosition].classList.remove(pacmanClass)
 }
-
 
 function createGrid() {
   for (let index = 0; index < gridCellCount; index++) {
@@ -231,11 +235,7 @@ function makeGhostHome(){
 }
 
 function makePortals(){
-  for (let index = 160; index <= 180; index += 20) {
-    cells[index].classList.remove(wallClass)  
-    cells[index].classList.add(portalClass)  
-  }
-  for (let index = 179; index <= 199; index += 20) {
+  for (let index = 179; index <= 180; index ++) {
     cells[index].classList.remove(wallClass)  
     cells[index].classList.add(portalClass) 
   }
@@ -353,33 +353,27 @@ function isScared(){
 
 function gameOver(position){
   if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) 
-  && !cells[position].classList.contains('scared')){
-    console.log('gameover')
+    && !cells[position].classList.contains('scared') || 
+    cells[position].classList.contains(blueGhostClass) && cells[position].classList.contains(pacmanClass) 
+    && !cells[position].classList.contains('scared') || 
+    cells[position].classList.contains(orangeGhostClass) && cells[position].classList.contains(pacmanClass) 
+    && !cells[position].classList.contains('scared') || 
+    cells[position].classList.contains(pinkGhostClass) && cells[position].classList.contains(pacmanClass) 
+    && !cells[position].classList.contains('scared') 
+  ){
+    console.log('life lost!')
     console.log(lives = lives - 1)
   } 
   if (lives === 0){
+    removePacman()
     grid.style.display = 'none'
-    console.log('reload page')
+    gameOverMessage.style.display = 'block'
   }
 }
 
-// todo: make ghost classes and ghost array? 
-// todo: Then hopefully won't need to write separate functions..
-// class makeGhost {
-//   constructor(name, position){
-//     this.name = name
-//     this.position = position
-//   }
-// }
-
-// const ghostArray = [
-//   new makeGhost('redghost', 208) ,
-//   new makeGhost('blueghost', 210)
-// ]
-
-
-let isPathClear = true
-let ghostMoves = [1, -1, -width, +width]
+function playAgain(){
+  location.reload()
+}
 
 // * red ghost
 
@@ -419,7 +413,7 @@ function redGhostMove(){
       redGhostPosition += width
       addRedGhost()
     } 
-  } , 500)
+  } , 200)
   addRedGhost()
 }
 
@@ -447,6 +441,7 @@ function blueGhostMove(){
   removeBlueGhost()
   setInterval(() => {
     bluePathCheck(ghostPath)
+    gameOver(blueGhostPosition)
     if (isPathClear === false){
       ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
       bluePathCheck(ghostPath)
@@ -468,7 +463,7 @@ function blueGhostMove(){
       blueGhostPosition += width
       addBlueGhost()
     } 
-  } , 500)
+  } , 200)
   addBlueGhost()
 }
 
@@ -496,6 +491,7 @@ function orangeGhostMove(){
   removeOrangeGhost()
   setInterval(() => {
     orangePathCheck(ghostPath)
+    gameOver(orangeGhostPosition)
     if (isPathClear === false){
       ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
       orangePathCheck(ghostPath)
@@ -517,7 +513,7 @@ function orangeGhostMove(){
       orangeGhostPosition += width
       addOrangeGhost()
     } 
-  } , 500)
+  } , 200)
   addOrangeGhost()
 }
 
@@ -545,6 +541,7 @@ function pinkGhostMove(){
   removePinkGhost()
   setInterval(() => {
     pinkPathCheck(ghostPath)
+    gameOver(pinkGhostPosition)
     if (isPathClear === false){
       ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
       pinkPathCheck(ghostPath)
@@ -566,8 +563,8 @@ function pinkGhostMove(){
       pinkGhostPosition += width
       addPinkGhost()
     } 
-  } , 500)
-  addOrangeGhost()
+  } , 200)
+  addPinkGhost()
 }
 
 function pinkPathCheck(ghostPath){
@@ -577,7 +574,6 @@ function pinkPathCheck(ghostPath){
     isPathClear = true
   }
 }
-
 
 createGrid()
 addPacman()
@@ -591,10 +587,13 @@ makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
 redGhostMove()
-// blueGhostMove()
-// orangeGhostMove()
-// pinkGhostMove()
+blueGhostMove()
+orangeGhostMove()
+pinkGhostMove()
+
 
 
 // * Events
 window.addEventListener('keydown', handleKeyUp)
+window.addEventListener('click', playAgain)
+
