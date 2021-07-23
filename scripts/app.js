@@ -30,7 +30,7 @@ const pinkGhostClass = 'pinkghost'
 // * Scores and positions
 
 let pacmanPosition = 247
-let totalGameScore = 2170
+let totalGameScore = 0
 let isPathClear = true
 let ghostMoves = [1, -1, -width, +width]
 let level = 1
@@ -62,7 +62,6 @@ function createGrid() {
 function makeWalls(){
   if (level === 1){
   // * border walls
-
     for (let index = 0; index <= 380; index += 20) {
       cells[index].classList.add(wallClass)
     }
@@ -246,7 +245,14 @@ function handleStart(event){
       orangeGhostMove()
       pinkGhostMove() 
     }, 500)
+    playAudio()
   }
+}
+
+function playAudio(){
+  const afterAudio = document.querySelector('#after')
+  afterAudio.src = './sounds/Ready For The Floor.mp3'
+  afterAudio.play()
 }
 
 function gameOver(){
@@ -268,7 +274,6 @@ function playAgain(event){
     location.reload()
   }
 }
-
 
 function makeGhostHome(){
   for (let index = 188; index <= 190; index++) {
@@ -370,9 +375,6 @@ function superFoodCheck(position){
   if (cells[position].classList.contains(superFoodPointClass)){
     cells[pacmanPosition].classList.remove(superFoodPointClass)
     totalGameScore = totalGameScore + 50
-    isScared = true
-    cells[redGhostPosition].classList.remove(redGhostMove)
-    cells[redGhostPosition].classList.add('scared')
   } 
 }
 
@@ -432,7 +434,7 @@ function redGhostMove(){
       } 
     } , 100)
     addRedGhost()
-  }, 100)
+  }, 150)
 }
 
 function redPathCheck(ghostPath){
@@ -594,14 +596,7 @@ function pinkPathCheck(ghostPath){
   }
 }
 
-
-
-
-
 // * Events
 window.addEventListener('keydown', handleKeyDown)
 window.addEventListener('keydown',handleStart)
 window.addEventListener('click', playAgain)
-
-
-
