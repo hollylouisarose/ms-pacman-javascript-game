@@ -358,7 +358,7 @@ function wallCheck(position) {
 }
 
 function scoreCheck(position) {
-  if (totalGameScore > 2170){
+  if (totalGameScore === 2170){
     youWin()   
   }
   if (cells[position].classList.contains(foodPointClass)){
