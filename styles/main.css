@@ -17,10 +17,12 @@ body {
   font-family: 'VT323', monospace;
   overflow-y: hidden;
   font-size: 20px;
+  background-color: black;
+  color: #fff
 }
 
 .pacman {
-  background-image: url('../images/testpm.png');
+  background-image: url('../images/mspacman.png');
   background-repeat: no-repeat;
   background-size: contain;
   animation: moveLeft 5s linear infinite;
@@ -31,11 +33,12 @@ body {
   display: flex;
   justify-content: center;
   height: 100vh;
+  pointer-events: none;
 }
 
 .grid {
   align-items: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  background-color: black;
   display: flex;
   flex-wrap: wrap;
   height: 100%;
@@ -43,10 +46,10 @@ body {
   height: 40vw;
   width: 40vw;
   margin-top: 80px;
+  pointer-events: none;
 }
 
 .grid div {
-  border: 1px solid lightgrey;
   flex-grow: 1;
   height: 5%;
   width: 5%;
@@ -60,17 +63,19 @@ body {
   left: 50%;
   background: rgb(247,220,247);
   color: #000;
-  z-index: 1;
+  z-index: 2;
   padding: 60px;
   border: 5px ridge rgb(247, 0,0);
   text-align: center;
   transform: translate(-50%, -50%);
 }
 
+
 .game-over button{
   font-family: 'VT323', monospace;
   background: rgb(247, 0,0);
   border-color: rgb(247, 0,0);
+  cursor: pointer;
 }
 
 .scores-outerwrapper {
@@ -80,50 +85,54 @@ body {
 }
 
 .wall {
-  background-color: #6aa8e293
+  background-color: rgb(247,220,247);
+  border: solid 2px rgb(247, 0,0);
 }
 
-.ghosthome {
-  background-color: #ebe52946
-}
 
-.portal {
-  background-color: #3eff0969
+.ghosthome, .portal {
+  background-color: black
 }
 
 .foodpoint {
-  background-image: url('../images/foodpoint.png');
+  background-image: url('../images/foodpointicon.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .superfoodpoint{
-  background-image: url('../images/superfoodpoint.png');
+  background-image: url('../images/superfood.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .redghost{
-  background-image: url('../images/redghost.png');
+  background-image: url('../images/redghosticon.png');
   background-repeat: no-repeat;
   background-size: contain;
   z-index: 1; 
 }
 
 .orangeghost{
-  background-image: url('../images/orangeghost.png');
+  background-image: url('../images/orangeghosticon.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .blueghost{
-  background-image: url('../images/blueghost.png');
+  background-image: url('../images/blueghosticon.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .pinkghost{
-  background-image: url('../images/pinkghost.png');
+  background-image: url('../images/pinkghosticon.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.scared{
+  background-image: url('../images/scarestate.png');
   background-repeat: no-repeat;
   background-size: contain;
 }

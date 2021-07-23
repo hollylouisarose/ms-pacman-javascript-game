@@ -2,16 +2,16 @@
 
 const grid = document.querySelector('.grid')
 const gameScore = document.getElementById('#score')
-const livesDisplay = document.getElementById('#lives')
+const livesDisplay = document.getElementById('#life-count')
 const gameOverMessage = document.querySelector('.game-over')
 const playAgainButton = document.querySelector('.game-over button')
+console.log(playAgainButton)
 
 // * Game Variables
 
 const width = 20
 const gridCellCount = width * width
 const cells = []
-const liveList = []
 
 // * CSS Classes
 
@@ -30,7 +30,6 @@ const pinkGhostClass = 'pinkghost'
 
 let pacmanPosition = 247
 let totalGameScore = 0
-let lives = 3
 let isPathClear = true
 let ghostMoves = [1, -1, -width, +width]
 
@@ -55,7 +54,7 @@ function createGrid() {
     cell.setAttribute('data-index', index)
     cells.push(cell)
     grid.appendChild(cell)
-    cell.textContent = index
+    // cell.textContent = index
   }
 }
 
@@ -262,7 +261,7 @@ function makeSuperFoodPoints(){
   cells[358].classList.add(superFoodPointClass)
 }
 
-function handleKeyUp(event){
+function handleKeyDown(event){
   removePacman()
   gameScore.innerHTML = totalGameScore
   switch (event.keyCode) {
@@ -270,29 +269,32 @@ function handleKeyUp(event){
       if (wallCheck(pacmanPosition + 1)){
         pacmanPosition ++ 
         scoreCheck(pacmanPosition)
-        pacManHitsGhost(pacmanPosition)
-        cells[pacmanPosition].classList.add('move-left')
+        superFoodCheck(pacmanPosition)
+        ghostCheck(pacmanPosition)
       } 
       break
     case 37: 
       if ( wallCheck(pacmanPosition - 1)){
         pacmanPosition --
         scoreCheck(pacmanPosition)
-        pacManHitsGhost(pacmanPosition)
+        superFoodCheck(pacmanPosition)
+        ghostCheck(pacmanPosition)
       } 
       break
     case 38:
       if (wallCheck(pacmanPosition - 20)) {
         pacmanPosition -= width
         scoreCheck(pacmanPosition)
-        pacManHitsGhost(pacmanPosition)
+        superFoodCheck(pacmanPosition)
+        ghostCheck(pacmanPosition)
       }
       break 
     case 40:
       if (wallCheck(pacmanPosition + 20)){
         pacmanPosition += width
         scoreCheck(pacmanPosition)
-        pacManHitsGhost(pacmanPosition)
+        superFoodCheck(pacmanPosition)
+        ghostCheck(pacmanPosition)
       }
       break
   }
@@ -307,59 +309,48 @@ function scoreCheck(position) {
   if (cells[position].classList.contains(foodPointClass)){
     cells[pacmanPosition].classList.remove(foodPointClass)
     totalGameScore = totalGameScore + 10 
-  } else if (cells[position].classList.contains(superFoodPointClass)){
-    cells[pacmanPosition].classList.remove(superFoodPointClass)
-    totalGameScore = totalGameScore + 50 
-    console.log('superpoint!')
-    addScaredState()
   } else if (!cells[position].classList.contains(foodPointClass) ||
             !cells[position].classList.contains(superFoodPointClass)){
     return
   }
 }
 
-
-function addScaredState(){
-  cells[redGhostPosition].classList.add('scared')
-  cells[blueGhostPosition].classList.add('scared')
-  cells[orangeGhostPosition].classList.add('scared')
-  cells[pinkGhostPosition].classList.add('scared')
-  console.log('added class',cells[redGhostPosition], cells[blueGhostPosition], 
-    cells[orangeGhostPosition], cells[pinkGhostPosition])
-  setTimeout(() => {
-    cells[redGhostPosition].classList.remove('scared')
-    cells[blueGhostPosition].classList.remove('scared')
-    cells[orangeGhostPosition].classList.remove('scared')
-    cells[pinkGhostPosition].classList.remove('scared')
-    console.log('removed class',cells[redGhostPosition], cells[blueGhostPosition], 
-      cells[orangeGhostPosition], cells[pinkGhostPosition])
-  }, 5000)
+function superFoodCheck(position){
+  if (cells[position].classList.contains(superFoodPointClass)){
+    cells[pacmanPosition].classList.remove(superFoodPointClass)
+    totalGameScore = totalGameScore + 50
+  } 
 }
 
-function pacManHitsGhost(position){
-  if (cells[position].classList.contains(redGhostClass) && cells[position].classList.contains(pacmanClass) ||
-  cells[position].classList.contains(blueGhostClass) && cells[position].classList.contains(pacmanClass) ||
-  cells[position].classList.contains(orangeGhostClass) && cells[position].classList.contains(pacmanClass) ||
-  cells[position].classList.contains(pinkGhostClass) && cells[position].classList.contains(pacmanClass) ){
+
+let lives = 3
+livesDisplay.innerHTML = lives
+
+function ghostCheck(position){
+  if (cells[position].classList.contains(redGhostClass) || 
+  cells[position].classList.contains(blueGhostClass) || 
+  cells[position].classList.contains(orangeGhostClass) ||
+  cells[position].classList.contains(pinkGhostClass) 
+  ){
     lives = lives - 1
-    console.log('pacman check',lives)
-  }
+    livesDisplay.innerHTML = lives
+  } 
   if (lives === 0){
     gameOver()
   }
 }
 
-
 function gameOver(){
   if (lives === 0){
-    removePacman()
     grid.style.display = 'none'
     gameOverMessage.style.display = 'block'
-  }
+  } 
 }
 
-function playAgain(){
-  location.reload()
+function playAgain(event){
+  if (event.type === 'click'){
+    location.reload()
+  }
 }
 
 // * red ghost
@@ -378,7 +369,6 @@ function redGhostMove(){
     removeRedGhost()
     setInterval(() => {
       redPathCheck(ghostPath)
-      pacManHitsGhost(redGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         redPathCheck(ghostPath)
@@ -412,7 +402,8 @@ function redPathCheck(ghostPath){
     isPathClear = true
   }
 }
-  
+
+
 // * blue ghost
 
 function addBlueGhost(){
@@ -429,7 +420,6 @@ function blueGhostMove(){
     removeBlueGhost()
     setInterval(() => {
       bluePathCheck(ghostPath)
-      pacManHitsGhost(blueGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         bluePathCheck(ghostPath)
@@ -481,7 +471,6 @@ function orangeGhostMove(){
     removeOrangeGhost()
     setInterval(() => {
       orangePathCheck(ghostPath)
-      pacManHitsGhost(orangeGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         orangePathCheck(ghostPath)
@@ -533,7 +522,6 @@ function pinkGhostMove(){
     removePinkGhost()
     setInterval(() => {
       pinkPathCheck(ghostPath)
-      pacManHitsGhost(pinkGhostPosition)
       if (isPathClear === false){
         ghostPath = ghostMoves[Math.floor(Math.random() * ghostMoves.length)]
         pinkPathCheck(ghostPath)
@@ -568,6 +556,9 @@ function pinkPathCheck(ghostPath){
   }
 }
 
+
+
+
 createGrid()
 addPacman()
 addRedGhost()
@@ -579,13 +570,19 @@ makeGhostHome()
 makePortals()
 makeFoodPoints()
 makeSuperFoodPoints()
-redGhostMove()
-blueGhostMove()
-orangeGhostMove()
-pinkGhostMove()
+// setTimeout(() => {
+//   redGhostMove()
+//   blueGhostMove()
+//   orangeGhostMove()
+//   pinkGhostMove() 
+// }, 500)
+
+
 
 
 // * Events
-window.addEventListener('keydown', handleKeyUp)
+window.addEventListener('keydown', handleKeyDown)
 window.addEventListener('click', playAgain)
+
+
 
