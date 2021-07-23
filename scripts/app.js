@@ -3,9 +3,10 @@
 const grid = document.querySelector('.grid')
 const gameScore = document.getElementById('#score')
 const livesDisplay = document.getElementById('#life-count')
+const startGameMessage = document.querySelector('.start-game')
 const gameOverMessage = document.querySelector('.game-over')
+const winMessage = document.querySelector('.win')
 const playAgainButton = document.querySelector('.game-over button')
-console.log(playAgainButton)
 
 // * Game Variables
 
@@ -29,10 +30,10 @@ const pinkGhostClass = 'pinkghost'
 // * Scores and positions
 
 let pacmanPosition = 247
-let totalGameScore = 0
+let totalGameScore = 2170
 let isPathClear = true
 let ghostMoves = [1, -1, -width, +width]
-
+let level = 1
 let blueGhostPosition = 170
 let pinkGhostPosition = 168
 let orangeGhostPosition = 210
@@ -59,167 +60,212 @@ function createGrid() {
 }
 
 function makeWalls(){
-
+  if (level === 1){
   // * border walls
 
-  for (let index = 0; index <= 380; index += 20) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 0; index <= 380; index += 20) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 19; index <= 399; index += 20) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 19; index <= 399; index += 20) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 0; index <= 19; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 0; index <= 19; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 381; index <= 398; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 381; index <= 398; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  // * horizontal walls
+    // * horizontal walls
 
-  for (let index = 103; index <= 105; index++) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 103; index <= 105; index++) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 108; index <= 111; index++) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 108; index <= 111; index++) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 114; index <= 117; index++) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 114; index <= 117; index++) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 141; index <= 143; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 141; index <= 143; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 155; index <= 158; index++) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 155; index <= 158; index++) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 202; index <= 205; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 202; index <= 205; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 214; index <= 217; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 214; index <= 217; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 222; index <= 225; index++) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 222; index <= 225; index++) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 234; index <= 237; index++) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 234; index <= 237; index++) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 227; index <= 231; index++) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 227; index <= 231; index++) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 268; index <= 271; index++) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 268; index <= 271; index++) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 308; index <= 311; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 308; index <= 311; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  // * top section blocks
+    // * top section blocks
 
-  for (let index = 42; index <= 46; index++) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 42; index <= 46; index++) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 62; index <= 66; index++) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 62; index <= 66; index++) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 53; index <= 57; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 53; index <= 57; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 73; index <= 77; index++) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 73; index <= 77; index++) {
+      cells[index].classList.add(wallClass)
+    }
 
-  // * bottom section blocks
+    // * bottom section blocks
 
-  for (let index = 262; index <= 264; index++) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 262; index <= 264; index++) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 275; index <= 277; index++) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 275; index <= 277; index++) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 342; index <= 346; index++) {
-    cells[index].classList.add(wallClass)    
-  }
+    for (let index = 342; index <= 346; index++) {
+      cells[index].classList.add(wallClass)    
+    }
 
-  for (let index = 353; index <= 357; index++) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 353; index <= 357; index++) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  // * vertical walls
+    // * vertical walls
 
-  for (let index = 9; index <= 69; index += 20) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 9; index <= 69; index += 20) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 10; index <= 70; index += 20) {
-    cells[index].classList.add(wallClass)  
-  }
+    for (let index = 10; index <= 70; index += 20) {
+      cells[index].classList.add(wallClass)  
+    }
 
-  for (let index = 105; index <= 165 ; index += 20) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 105; index <= 165 ; index += 20) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 113; index <= 173; index += 20) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 113; index <= 173; index += 20) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 167; index <= 207; index += 20) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 167; index <= 207; index += 20) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 171; index <= 211; index += 20) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 171; index <= 211; index += 20) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 266; index <= 346; index += 20 ) {
-    cells[index].classList.add(wallClass)   
-  }
+    for (let index = 266; index <= 346; index += 20 ) {
+      cells[index].classList.add(wallClass)   
+    }
 
-  for (let index = 273; index <= 333; index += 20) {
-    cells[index].classList.add(wallClass)
-  }
+    for (let index = 273; index <= 333; index += 20) {
+      cells[index].classList.add(wallClass)
+    }
 
-  for (let index = 263; index <= 303; index += 20) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 263; index <= 303; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
   
-  for (let index = 264; index <= 304; index += 20) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 264; index <= 304; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 275; index <= 315 ; index += 20) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 275; index <= 315 ; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 276; index <= 316; index += 20) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 276; index <= 316; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 309; index <= 349; index += 20) {
-    cells[index].classList.add(wallClass) 
-  }
+    for (let index = 309; index <= 349; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
 
-  for (let index = 310; index <= 350; index += 20) {
-    cells[index].classList.add(wallClass) 
+    for (let index = 310; index <= 350; index += 20) {
+      cells[index].classList.add(wallClass) 
+    }
+  }
+}
+
+function handleStart(event){
+  if (event.keyCode === 32){
+    startGameMessage.style.display = 'none'
+    createGrid()
+    addPacman()
+    addRedGhost()
+    addBlueGhost()
+    addOrangeGhost()
+    addPinkGhost()
+    makeWalls()
+    makeGhostHome()
+    makePortals()
+    makeFoodPoints()
+    makeSuperFoodPoints()
+    youWin()
+    setTimeout(() => {
+      redGhostMove()
+      blueGhostMove()
+      orangeGhostMove()
+      pinkGhostMove() 
+    }, 500)
+  }
+}
+
+function gameOver(){
+  if (lives === 0){
+    grid.style.display = 'none'
+    gameOverMessage.style.display = 'block'
+  } 
+}
+
+function youWin(){
+  if (totalGameScore === 2170){
+    grid.style.display = 'none' 
+    winMessage.style.display = 'block'    
+  }
+}
+
+function playAgain(event){
+  if (event.type === 'click'){
+    location.reload()
   }
 }
 
@@ -271,6 +317,7 @@ function handleKeyDown(event){
         scoreCheck(pacmanPosition)
         superFoodCheck(pacmanPosition)
         ghostCheck(pacmanPosition)
+
       } 
       break
     case 37: 
@@ -306,6 +353,9 @@ function wallCheck(position) {
 }
 
 function scoreCheck(position) {
+  if (totalGameScore > 2170){
+    youWin()   
+  }
   if (cells[position].classList.contains(foodPointClass)){
     cells[pacmanPosition].classList.remove(foodPointClass)
     totalGameScore = totalGameScore + 10 
@@ -315,13 +365,16 @@ function scoreCheck(position) {
   }
 }
 
+
 function superFoodCheck(position){
   if (cells[position].classList.contains(superFoodPointClass)){
     cells[pacmanPosition].classList.remove(superFoodPointClass)
     totalGameScore = totalGameScore + 50
+    isScared = true
+    cells[redGhostPosition].classList.remove(redGhostMove)
+    cells[redGhostPosition].classList.add('scared')
   } 
 }
-
 
 let lives = 3
 livesDisplay.innerHTML = lives
@@ -337,19 +390,6 @@ function ghostCheck(position){
   } 
   if (lives === 0){
     gameOver()
-  }
-}
-
-function gameOver(){
-  if (lives === 0){
-    grid.style.display = 'none'
-    gameOverMessage.style.display = 'block'
-  } 
-}
-
-function playAgain(event){
-  if (event.type === 'click'){
-    location.reload()
   }
 }
 
@@ -390,7 +430,7 @@ function redGhostMove(){
         redGhostPosition += width
         addRedGhost()
       } 
-    } , 200)
+    } , 100)
     addRedGhost()
   }, 100)
 }
@@ -402,7 +442,6 @@ function redPathCheck(ghostPath){
     isPathClear = true
   }
 }
-
 
 // * blue ghost
 
@@ -453,7 +492,6 @@ function bluePathCheck(ghostPath){
     isPathClear = true
   }
 }
-
 
 // * orange ghost
 
@@ -559,29 +597,10 @@ function pinkPathCheck(ghostPath){
 
 
 
-createGrid()
-addPacman()
-addRedGhost()
-addBlueGhost()
-addOrangeGhost()
-addPinkGhost()
-makeWalls()
-makeGhostHome()
-makePortals()
-makeFoodPoints()
-makeSuperFoodPoints()
-// setTimeout(() => {
-//   redGhostMove()
-//   blueGhostMove()
-//   orangeGhostMove()
-//   pinkGhostMove() 
-// }, 500)
-
-
-
 
 // * Events
 window.addEventListener('keydown', handleKeyDown)
+window.addEventListener('keydown',handleStart)
 window.addEventListener('click', playAgain)
 
 
