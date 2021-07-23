@@ -532,7 +532,7 @@ function orangeGhostMove(){
         orangeGhostPosition += width
         addOrangeGhost()
       } 
-    } , 300)
+    } , 250)
     addOrangeGhost()
   }, 900)
 }
