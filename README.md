@@ -22,7 +22,7 @@ I chose Pac-Man because aside from childhood nostalgia, it presented interesting
 
 In my version, I decided on a Ms Pac-Man theme, as I love her colourful 80s aesthetic and sassy nature.
 
-#### Gameplay
+### Gameplay
 
 ![Gif of gameplay](images/mspacman.gif)
 
@@ -36,7 +36,7 @@ After some initial research, I worked on one section of the game at a time, test
 * Moving Ms Pac-Man.
 * The Ghosts.
 
-#### The Maze
+### The Maze
 
 To translate my maze design onto the screen I used for loops to apply my CSS ‘wall’ class to certain grid squares. Although not the most sophisticated solution, it was great practice in iteration and allowed me to apply the class to large grid areas fairly efficiently.
 
@@ -62,7 +62,7 @@ function makeWalls(){
     }
 ```
 
-#### Moving Ms Pac-Man
+### Moving Ms Pac-Man
 
 To move Ms Pac-Man I used a switch statement, something I hadn’t explored much before. I found it gave me a solid base to build on as I could test different logic each time Ms Pac-Man entered a new grid square. For example, was she in the same square as a super point? If so, add 50 points to the score.
 
@@ -113,7 +113,7 @@ function handleKeyDown(event){
 
 The ghosts were undoubtedly the most challenging aspect of the game.
 
-#### The Ghosts
+### The Ghosts
 
 My biggest block was getting the ghosts to move independently and to not move through the walls (ironically).
 
@@ -170,14 +170,14 @@ The ghost movement was a fascinating, if at times frustrating process. It taught
 
 To improve my code, I would like to explore writing the ghosts as a class so I could write one ghost function rather than eight separate functions (two per ghost).
 
-#### Known bugs
+## Known bugs
 
  The score does not add 10 points on Ms PacMans first move.
  The game starts on a space bar event, but will attempt to start again if the space bar is clicked more than once.
  Game will reload if the user clicks anywhere on the page.
  The ghosts don’t always remove a life from Ms PacMan when their paths cross.
 
-#### Future features 
+## Future features 
 
 More levels, with more complicated maze designs.
 ’Chase’ state (ghosts track Ms Pac-Man’s movement).
@@ -187,7 +187,7 @@ More levels, with more complicated maze designs.
 
 Ms Pac-Man greatly helped me improve my JavaScript understanding, especially using Booleans to check certain states and how to call functions inside other functions. I also learnt that you don’t have to stick with code just because you’ve sunk time into it. Even your failures are very valuable. You always learn from the process and then write better code on the next pass.
 
-#### Credits
+### Credits
 
 Sprites pulled from Ms.Pac-Man by JDASTER64,
 [GameBoy Advance - Namco Museum - Ms. Pacman - General Sprites - The Spriters Resource](https://www.spriters-resource.com/game_boy_advance/namcomuseum/sheet/22732/)
